@@ -1,5 +1,6 @@
 import React from "react";
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from "react-native";
+import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import { light } from "../../shared";
 
@@ -17,16 +18,22 @@ const Logo = styled.Image`
     margin: 0 auto;
 `;
 
-export default function Welcome({ children }) {
-    const diemissKeyboard = () => {
+function AuthLayout({ children }) {
+    const dismissKeyboard = () => {
         Keyboard.dismiss();
     };
-    return <TouchableWithoutFeedback style={{ flex: 1 }} onPress={diemissKeyboard} disabled={Platform.OS === "web"}>
+    return <TouchableWithoutFeedback style={{ height: "100%" }} onPress={dismissKeyboard} disabled={Platform.OS === "web"}>
         <Container>
-            <KeyboardAvoidingView style={{ width: "100%" }} behavior="position" keyboardVerticalOffset={Platform.OS === "ios" ? 50 : -100}>
+            <KeyboardAvoidingView style={{ width: "100%" }} behavior={Platform.OS === "ios" ? "position" : "padding"} keyboardVerticalOffset={Platform.OS === "ios" ? 50 : 10}>
                 <Logo resizeMode="center" source={light ? require("../../assets/logo_dark.png") : require("../../assets/logo_light.png")} />
                 {children}
             </KeyboardAvoidingView>
         </Container>
     </TouchableWithoutFeedback>;
 };
+
+AuthLayout.propTypes = {
+    children: PropTypes.node.isRequired
+};
+
+export default AuthLayout;
